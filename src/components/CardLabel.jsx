@@ -13,7 +13,7 @@ export const CardLabel = ({data}) => {
                     <p className="text-xl text-gray-900 dark:text-white">Id: {id}</p>
                 </span>
                 : <span>
-                        <p className="mt-2 text-4xl text-red-600 dark:text-red-500"><span className="font-medium">Oh!</span> Cadena ingresada con error.</p>
+                        <p className="mt-2 text-4xl text-red-600 dark:text-red-500"><span className="font-medium"> 😱 </span> Cadena ingresada con error.</p>
                     </span>
                 }
             </a>

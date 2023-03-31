@@ -55,44 +55,50 @@ const onlyNumbers = (str)=> {
 }
 
 const onlyText = (str) =>{
-    return !/\d/.test(str);
+    return !/[^a-zA-Z]/.test(str);
   }
 
+
+const msg_errors = {name:'Nombre',last_name:'Apellido',id:'ID'}
 const processKeys = (keys)=>{
+    
     const [first_name,lastname, id ] = keys
-    const test_pased = valiData({ first_name, lastname, id})
-    if(test_pased == keys.length)
+    const test = valiData({ first_name, lastname, id})
+    if(test.pased == keys.length)
         return { first_name, lastname, id}
     else
-        throw new Error("Validación no fue exitosa")
+      throw new Error(`Validación en ${msg_errors[test.key]} no fue exitosa`)
+    
 }
 
 const valiData = ({ first_name, lastname, id})=> {
     
     let test = { name:false, last_name:false, id:false }
-    let test_pased = 0
+    let valid = {pased:0,key : null}
     test.name = onlyText(first_name)
     test.last_name = onlyText(lastname)
     test.id = onlyNumbers(id)
-
     for (const key in test) {
-        test_pased += test[key] ? 1 : 0
+      valid.pased += test[key] ? 1 : 0
+      valid.key = !test[key] ? key : null
+      if(!test[key]) return valid
     }
-
-    return test_pased
-
+    return valid
 }
 
   const prepare = async(_string)=>{
     const arr_string = _string.split('0')
     const keys = arr_string.filter(key => key != '')
     if(keys.length == 3){
-
        const {first_name,lastname,id} = processKeys(keys)
       return  {first_name,lastname,id} 
     }
     else
-        throw new Error("Cadena mal formada")
+      if(keys.length == 0) throw new Error("Cadena Vacia, Ingresa: Nombre, Apellido, Id separados con almenos un 0 ")
+      if(keys.length == 1) throw new Error("Cadena incompleta ingresa : Apellido y Id, separados con almenos un 0")
+      if(keys.length == 2) throw new Error("Cadena incompleta ingresa : Id, separado con almenos un 0")
+      if(keys.length > 3) throw new Error("Cadena excede los parametros, Debes ingresar:  Nombre, Apellido, Id, separados con almenos un 0")
+      else throw new Error("Cadena mal formada")
   }
 
   
@@ -104,6 +110,7 @@ const valiData = ({ first_name, lastname, id})=> {
           className="block py-2.5 px-0 w-full text-3xl text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-white focus:outline-none focus:ring-0 focus:border-white peer" 
           placeholder=" " 
           value={text}
+          pattern="[a-z]{1,15}"
           onChange={onChangeHandler}
           onKeyDown={handleKeyDown}
           />

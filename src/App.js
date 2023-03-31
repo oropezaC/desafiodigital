@@ -1,7 +1,4 @@
-
-
 import './App.css';
-
 
 import Header  from './core/layouts/Header';
 import Footer  from './core/layouts/Footer';
